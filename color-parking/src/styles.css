@@ -1,0 +1,228 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-ink: #111111;
+  --color-paper: #ffffff;
+  --font-sans: 'Helvetica Neue', Helvetica, -apple-system, BlinkMacSystemFont, 'Inter', Arial,
+    sans-serif;
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    overscroll-behavior: none;
+    background: var(--color-paper);
+    color: var(--color-ink);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    position: fixed;
+    inset: 0;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: manipulation;
+  }
+
+  img,
+  svg {
+    -webkit-user-drag: none;
+    user-select: none;
+  }
+
+  button {
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 3px;
+  }
+}
+
+@layer components {
+  /* Full-screen app shell that respects the notch, Dynamic Island and home indicator. */
+  .app-root {
+    position: fixed;
+    inset: 0;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom)
+      env(safe-area-inset-left);
+    max-width: 720px;
+    margin: 0 auto;
+    transition: opacity 220ms ease, transform 220ms ease;
+  }
+  .app-root.is-fading {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  .screen {
+    animation: screen-in 520ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+
+  .label {
+    font-size: 11px;
+    line-height: 1.2;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .headline {
+    font-size: clamp(56px, 19vw, 112px);
+    font-weight: 700;
+    line-height: 0.86;
+    letter-spacing: -0.055em;
+  }
+  @media (max-height: 640px) {
+    .headline {
+      font-size: clamp(48px, 15vw, 80px);
+    }
+  }
+
+  .big-btn {
+    display: flex;
+    width: 100%;
+    min-height: 68px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    border: 1.5px solid var(--color-ink);
+    border-radius: 999px;
+    background: var(--color-paper);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    transition: background-color 160ms ease, color 160ms ease, transform 160ms ease;
+  }
+  .big-btn:active {
+    background: var(--color-ink);
+    color: var(--color-paper);
+    transform: scale(0.98);
+  }
+  @media (hover: hover) {
+    .big-btn:hover {
+      background: var(--color-ink);
+      color: var(--color-paper);
+    }
+  }
+
+  .icon-btn {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 999px;
+    transition: transform 140ms ease, background-color 140ms ease;
+  }
+  .icon-btn:active {
+    transform: scale(0.9);
+    background: rgb(17 17 17 / 0.06);
+  }
+
+  /* Cars & stalls */
+  .car-body {
+    transition: filter 180ms ease;
+    filter: drop-shadow(0 0 0 rgb(0 0 0 / 0));
+  }
+  .car-body.car-lifted {
+    filter: drop-shadow(0 10px 10px rgb(0 0 0 / 0.16));
+  }
+
+  .stall-pad {
+    transition: background-color 200ms ease, border-color 200ms ease, transform 260ms
+        cubic-bezier(0.3, 1.4, 0.5, 1);
+  }
+  .stall-pad.stall-approach {
+    transform: scale(1.05);
+  }
+
+  /* Welcome */
+  .hero-car {
+    translate: -50% -50%;
+    animation: hero-car-in 900ms cubic-bezier(0.2, 0.9, 0.25, 1.15) both;
+  }
+  .hero-ring,
+  .hero-line {
+    animation: draw 1200ms cubic-bezier(0.6, 0, 0.2, 1) both;
+  }
+  .hero-line {
+    animation-delay: 200ms;
+  }
+
+  /* Completion */
+  .coin-pop {
+    animation: coin-pop 620ms cubic-bezier(0.2, 0.9, 0.3, 1.4) both;
+  }
+
+  .sheet {
+    animation: sheet-in 380ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+  .scroll-area {
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+    -webkit-user-select: text;
+    user-select: text;
+  }
+}
+
+@keyframes screen-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+@keyframes hero-car-in {
+  from {
+    opacity: 0;
+    transform: translateY(60%);
+  }
+}
+@keyframes draw {
+  from {
+    stroke-dasharray: 0 1;
+  }
+  to {
+    stroke-dasharray: 1 0;
+  }
+}
+@keyframes coin-pop {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.4);
+  }
+}
+@keyframes sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .screen,
+  .hero-car,
+  .hero-ring,
+  .hero-line,
+  .coin-pop,
+  .sheet {
+    animation-duration: 1ms;
+  }
+}
